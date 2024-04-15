@@ -1,5 +1,4 @@
 import setuptools
-from dig.version import __version__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -9,7 +8,7 @@ tests_require = ['pytest', 'pytest-cov', 'mock']
 
 setuptools.setup(
     name="T-GNNExplainer",
-    version=__version__,
+    version=1.0,
     license="GPLv3",
     description="T-GNNExplainer: Explaining Temporal Graph Models through an Explorer-Navigator Framework",
     long_description=long_description,
