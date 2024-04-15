@@ -54,6 +54,8 @@ parser.add_argument('--attn_mode', type=str, choices=['prod', 'map'], default='p
 parser.add_argument('--time', type=str, choices=['time', 'pos', 'empty'], help='how to use time information', default='time')
 parser.add_argument('--uniform', action='store_true', help='take uniform sampling from temporal neighbors')
 
+parser.add_argument('--seed', type=int, default=123, help='seed for randomization (python random and np.random)')
+
 try:
     args = parser.parse_args()
 except:
@@ -79,10 +81,16 @@ LEARNING_RATE = args.lr
 NODE_DIM = args.node_dim
 TIME_DIM = args.time_dim
 
+SEED = args.seed
+
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+
 # import ipdb; ipdb.set_trace()
 
-MODEL_SAVE_PATH = f'./saved_models/tgat_{args.data}_best.pth'
-get_checkpoint_path = lambda epoch: f'./saved_checkpoints/{args.data}-{args.agg_method}-{args.attn_mode}-{epoch}.pth'
+MODEL_SAVE_PATH = f'./saved_models/tgat_{args.data}_{args.seed}_best.pth'
+get_checkpoint_path = lambda epoch: f'./saved_checkpoints/{args.data}-{args.agg_method}-{args.attn_mode}-{args.seed}-{epoch}.pth'
 
 ### set up logger
 logging.basicConfig(level=logging.INFO)
@@ -153,7 +161,6 @@ ts_l = g_df.ts.values # event's time
 max_src_index = src_l.max()
 max_idx = max(src_l.max(), dst_l.max())
 
-random.seed(2020)
 
 total_node_set = set(np.unique(np.hstack([g_df.u.values, g_df.i.values])))
 num_total_unique_nodes = len(total_node_set)
@@ -235,7 +242,7 @@ nn_test_rand_sampler = RandEdgeSampler(nn_test_src_l, nn_test_dst_l)
 
 
 ### Model initialize
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device(f'cuda:{GPU}' if torch.cuda.is_available() else 'cpu')
 tgan = TGAN(train_ngh_finder, n_feat, e_feat,
             num_layers=NUM_LAYER, use_time=USE_TIME, agg_method=AGG_METHOD, attn_mode=ATTN_MODE,
             n_head=NUM_HEADS, drop_out=DROP_OUT,

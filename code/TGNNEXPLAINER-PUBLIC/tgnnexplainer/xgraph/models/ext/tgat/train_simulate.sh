@@ -15,3 +15,4 @@ do
 
 done
 
+# python learn_simulate.py -d simulate_v1 --bs 256 --n_degree 10 --n_epoch 100 --agg_method attn --attn_mode prod --node_dim 4 --time_dim 4 --gpu 1 --n_head 2 --prefix simulate_v1
