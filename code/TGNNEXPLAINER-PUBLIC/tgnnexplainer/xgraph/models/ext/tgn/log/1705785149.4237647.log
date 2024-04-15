@@ -1,4 +1,0 @@
-2024-01-20 22:12:29,424 - root - INFO - Namespace(aggregator='last', backprop_every=1, bs=200, data='reddit', different_new_nodes=False, drop_out=0.1, dyrep=False, embedding_module='graph_attention', gpu=0, lr=0.0001, memory_dim=172, memory_update_at_end=False, memory_updater='gru', message_dim=100, message_function='identity', n_degree=10, n_epoch=100, n_head=2, n_layer=2, n_runs=1, node_dim=100, patience=5, prefix='tgn-attn', randomize_features=False, time_dim=100, uniform=False, use_destination_embedding_in_message=False, use_memory=True, use_source_embedding_in_message=False)
-2024-01-20 22:12:37,844 - root - INFO - num of training instances: 389989
-2024-01-20 22:12:37,844 - root - INFO - num of batches per epoch: 1950
-2024-01-20 22:12:37,941 - root - INFO - start 0 epoch
