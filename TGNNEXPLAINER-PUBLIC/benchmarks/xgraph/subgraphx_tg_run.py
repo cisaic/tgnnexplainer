@@ -66,7 +66,9 @@ def start_multi_process(explainer, target_event_idxs, parallel_degree):
 def pipeline(config: DictConfig):
     # model config
     config.models.param = config.models.param[config.datasets.dataset_name]
-    config.models.ckpt_path = str(ROOT_DIR/'xgraph'/'models'/'checkpoints'/f'{config.models.model_name}_{config.datasets.dataset_name}_best.pth')
+    # config.models.ckpt_path = str(ROOT_DIR/'xgraph'/'models'/'checkpoints'/f'{config.models.model_name}_{config.datasets.dataset_name}_best.pth')
+    # TO DO --> move checkpoints all into one dir?????
+    config.models.ckpt_path = str(ROOT_DIR/'xgraph'/'models'/'ext'/'tgat'/'saved_models'/f'{config.models.model_name}_{config.datasets.dataset_name}_{config.datasets.seed}_best.pth')
 
     # dataset config
     config.datasets.dataset_path = str(ROOT_DIR/'xgraph'/'dataset'/'data'/f'{config.datasets.dataset_name}.csv')
