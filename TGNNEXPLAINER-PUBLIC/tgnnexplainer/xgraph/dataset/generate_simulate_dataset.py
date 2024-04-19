@@ -266,7 +266,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', type=str, default='simulate_v1', choices=['simulate_v1', 'simulate_v2'])
     args = parser.parse_args()
     np.random.seed(2022)
-
+    
     dataset_name = 'simulate_v1' # simulate_v1, simulate_v2
 
     if dataset_name == 'simulate_v1':

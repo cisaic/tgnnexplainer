@@ -40,7 +40,7 @@ This step generates the simulate datasets with Tick. note that the Tick module i
 
 # Generate explain indexs
 ```
-cd  ~/workspace/GNNEXPLAINER-PUBLIC/tgnnexplainer/xgraph/dataset
+cd  ~/workspace/TGNNEXPLAINER-PUBLIC/tgnnexplainer/xgraph/dataset
 python tg_dataset.py -d reddit -c index
 ```
 This step creates a test set for the explainers. it randomly selects 500 indexes from the full test set.

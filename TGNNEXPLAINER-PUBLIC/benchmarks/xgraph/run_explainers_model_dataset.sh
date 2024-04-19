@@ -22,7 +22,10 @@ echo "=== STARTING pg_explainer explaining on ${model} trained on ${dataset} on 
 
 # ours
 echo "=== STARTING subgraphx explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed}
+python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=1
+python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=5
+python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=10
+python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=100
 echo "=== ENDING subgraphx_tg explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
 
 # baselines
@@ -36,5 +39,5 @@ echo "=== ENDING pbone explaining on ${model} trained on ${dataset} on GPU ${gpu
 
 echo "good job :)"
 
-curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from 'fgolemo@gmail.com' --mail-rcpt 'fgolemo@gmail.com' --mail-rcpt 'c.isaicu@gmail.com' --user 'fgolemo@gmail.com:cbpd uyvw pzqg fppq' -T <(echo -e "From: fgolemo@gmail.com\nTo: fgolemo@gmail.com,c.isaicu@gmail.com\nSubject: Training Done\n\nFinished ${model} explanation of ==${ds}== on on GPU ==${gpu}==")
+curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from 'fgolemo@gmail.com' --mail-rcpt 'fgolemo@gmail.com' --mail-rcpt 'c.isaicu@gmail.com' --user 'fgolemo@gmail.com:cbpd uyvw pzqg fppq' -T <(echo -e "From: fgolemo@gmail.com\nTo: fgolemo@gmail.com,c.isaicu@gmail.com\nSubject: Training Done\n\nFinished ${model} explanation of ==${dataset}== with seed ==${seed}== on on GPU ==${gpu}==")
 

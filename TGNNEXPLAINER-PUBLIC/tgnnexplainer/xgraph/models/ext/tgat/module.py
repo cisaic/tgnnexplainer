@@ -7,17 +7,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 import sys
 import os
-def remove_first_two_directories(path):
-    path_parts = path.split(os.sep)[3:]  # Split the path and discard the first 3 parts
-    new_path = os.sep.join(path_parts)  # Rejoin the remaining parts
-    return new_path
+# def remove_first_two_directories(path):
+#     path_parts = path.split(os.sep)[3:]  # Split the path and discard the first 3 parts
+#     new_path = os.sep.join(path_parts)  # Rejoin the remaining parts
+#     return new_path
 
-# Get the current working directory
-full_dir = os.getcwd()
-modified_dir = remove_first_two_directories(full_dir)
-pruned_dir=Path(modified_dir).parents[4]
-p=str("/home/"+str(pruned_dir))
-sys.path.append(p)
+# # Get the current working directory
+# full_dir = os.getcwd()
+# modified_dir = remove_first_two_directories(full_dir)
+# print (modified_dir, full_dir, Path(modified_dir).parents)
+# pruned_dir=Path(modified_dir).parents[4]
+# p=str("/home/"+str(pruned_dir))
+# sys.path.append(p)
 
 from tgnnexplainer.xgraph.models.ext.tgat.graph import NeighborFinder
 

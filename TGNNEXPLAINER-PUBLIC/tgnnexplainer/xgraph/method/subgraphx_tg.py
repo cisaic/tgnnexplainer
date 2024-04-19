@@ -4,7 +4,7 @@ import copy
 import math
 import time
 import random
-from path import Path
+from pathlib import Path
 from sklearn.utils import shuffle
 import torch
 import numpy as np
