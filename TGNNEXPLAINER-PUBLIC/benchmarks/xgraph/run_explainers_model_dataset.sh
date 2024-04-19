@@ -22,10 +22,17 @@ echo "=== STARTING pg_explainer explaining on ${model} trained on ${dataset} on 
 
 # ours
 echo "=== STARTING subgraphx explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=1
+# we always run c_puct 5
 python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=5
-python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=10
-python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=100
+
+# we run c_puct 1, 10, 100 if seed is 1
+if [ $seed -eq 1 ]
+then
+    echo "=== RUNNING c_puct 1,10,100 because seed is 1 ==="
+    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=1
+    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=10
+    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=100
+fi
 echo "=== ENDING subgraphx_tg explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
 
 # baselines
