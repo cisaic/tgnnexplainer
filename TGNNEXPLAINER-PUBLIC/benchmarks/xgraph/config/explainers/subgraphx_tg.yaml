@@ -11,7 +11,7 @@ use_pg_explainer: True
 pg_positive: True
 
 
-parallel_degree: 1 # 1, 2, ...
+parallel_degree: 8 # 1, 2, ...
 
 param:
   wikipedia:

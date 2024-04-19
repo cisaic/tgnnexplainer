@@ -383,13 +383,13 @@ class SubgraphXTG(BaseExplainerTG):
     MCTS based temporal graph GNN explainer
     """
 
-    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, all_events: DataFrame,  explanation_level: str, device, 
+    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, seed:int, all_events: DataFrame,  explanation_level: str, device, 
                 verbose: bool = True, results_dir = None, debug_mode: bool = True,
                 # specific params
                 rollout: int = 20, min_atoms: int = 1, c_puct: float = 10.0,
                 # expand_atoms=14,
                 load_results=False, mcts_saved_dir: Optional[str] = None, save_results: bool= True,
-                pg_explainer_model=None, pg_positive=True,
+                pg_explainer_model=None, pg_positive=True
                 ):
 
         super(SubgraphXTG, self).__init__(model=model, 
@@ -401,7 +401,8 @@ class SubgraphXTG(BaseExplainerTG):
                                           device=device,
                                           verbose=verbose,
                                           results_dir=results_dir,
-                                          debug_mode=debug_mode
+                                          debug_mode=debug_mode,
+                                          seed=seed
                                           )
         
 
@@ -493,20 +494,20 @@ class SubgraphXTG(BaseExplainerTG):
         
 
     @staticmethod
-    def _mcts_recorder_path(result_dir, model_name, dataset_name, event_idx, suffix):
+    def _mcts_recorder_path(result_dir, model_name, dataset_name, event_idx, seed, suffix):
         if suffix is not None:
-            record_filename = result_dir/f'{model_name}_{dataset_name}_{event_idx}_mcts_recorder_{suffix}.csv'
+            record_filename = result_dir/f'{model_name}_{dataset_name}_{seed}_{event_idx}_mcts_recorder_{suffix}.csv'
         else:
-            record_filename = result_dir/f'{model_name}_{dataset_name}_{event_idx}_mcts_recorder.csv'
+            record_filename = result_dir/f'{model_name}_{dataset_name}_{seed}_{event_idx}_mcts_recorder.csv'
         
         return record_filename
     
     @staticmethod
-    def _mcts_node_info_path(node_info_dir, model_name, dataset_name, event_idx, suffix):
+    def _mcts_node_info_path(node_info_dir, model_name, dataset_name, event_idx, seed, suffix):
         if suffix is not None:
-            nodeinfo_filename = Path(node_info_dir)/f"{model_name}_{dataset_name}_{event_idx}_mcts_node_info_{suffix}.pt"
+            nodeinfo_filename = Path(node_info_dir)/f"{model_name}_{dataset_name}_{seed}_{event_idx}_mcts_node_info_{suffix}.pt"
         else:
-            nodeinfo_filename = Path(node_info_dir)/f"{model_name}_{dataset_name}_{event_idx}_mcts_node_info.pt"
+            nodeinfo_filename = Path(node_info_dir)/f"{model_name}_{dataset_name}_{seed}_{event_idx}_mcts_node_info.pt"
 
         return nodeinfo_filename
 
@@ -514,7 +515,7 @@ class SubgraphXTG(BaseExplainerTG):
         # save records
         recorder_df = pd.DataFrame(self.mcts_state_map.recorder)
         # ROOT_DIR.parent/'benchmarks'/'results'
-        record_filename = self._mcts_recorder_path(self.results_dir, self.model_name, self.dataset_name, event_idx, suffix=self.suffix)
+        record_filename = self._mcts_recorder_path(self.results_dir, self.model_name, self.dataset_name, event_idx, self.seed, suffix=self.suffix)
         recorder_df.to_csv(record_filename, index=False)
 
         print(f'mcts recorder saved at {str(record_filename)}')
@@ -523,12 +524,12 @@ class SubgraphXTG(BaseExplainerTG):
         saved_contents = {
             'saved_MCTSInfo_list': self.write_from_MCTSNode_list(tree_nodes),
         }
-        path = self._mcts_node_info_path(self.mcts_saved_dir, self.model_name, self.dataset_name, event_idx, suffix=self.suffix)
+        path = self._mcts_node_info_path(self.mcts_saved_dir, self.model_name, self.dataset_name, event_idx,  self.seed, suffix=self.suffix)
         torch.save(saved_contents, path)
         print(f'results saved at {path}')
     
     def _load_saved_nodes_info(self, event_idx):
-        path = self._mcts_node_info_path(self.mcts_saved_dir, self.model_name, self.dataset_name, event_idx, suffix=self.suffix)
+        path = self._mcts_node_info_path(self.mcts_saved_dir, self.model_name, self.dataset_name, event_idx,  self.seed, suffix=self.suffix)
         assert os.path.isfile(path)
         saved_contents = torch.load(path)
         
