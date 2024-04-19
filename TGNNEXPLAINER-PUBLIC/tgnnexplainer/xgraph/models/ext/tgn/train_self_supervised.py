@@ -14,8 +14,8 @@ from model.tgn import TGN
 from utils.utils import EarlyStopMonitor, RandEdgeSampler, get_neighbor_finder
 from utils.data_processing import get_data, compute_time_statistics
 
-torch.manual_seed(0)
-np.random.seed(0)
+# torch.manual_seed(0)
+# np.random.seed(0)
 
 ### Argument and global variables
 parser = argparse.ArgumentParser('TGN self-supervised training')
@@ -61,6 +61,8 @@ parser.add_argument('--use_source_embedding_in_message', action='store_true',
 parser.add_argument('--dyrep', action='store_true',
                                         help='Whether to run the dyrep model')
 
+parser.add_argument('--seed', type=int, default=123, help='seed for randomization (python random and np.random)')
+
 
 try:
     args = parser.parse_args()
@@ -84,11 +86,20 @@ USE_MEMORY = args.use_memory
 MESSAGE_DIM = args.message_dim
 MEMORY_DIM = args.memory_dim
 
+SEED = args.seed
+
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+
 Path("./saved_models/").mkdir(parents=True, exist_ok=True)
 Path("./saved_checkpoints/").mkdir(parents=True, exist_ok=True)
-MODEL_SAVE_PATH = f'./saved_models/{args.prefix}-{args.data}.pth'
-get_checkpoint_path = lambda \
-        epoch: f'./saved_checkpoints/{args.prefix}-{args.data}-{epoch}.pth'
+# MODEL_SAVE_PATH = f'./saved_models/{args.prefix}-{args.data}.pth'
+# get_checkpoint_path = lambda \
+#         epoch: f'./saved_checkpoints/{args.prefix}-{args.data}-{epoch}.pth'
+
+MODEL_SAVE_PATH = f'./saved_models/tgn_{args.data}_{args.seed}_best.pth'
+get_checkpoint_path = lambda epoch: f'./saved_checkpoints/{args.prefix}-{args.data}-{args.seed}-{epoch}.pth'
 
 ### set up logger
 logging.basicConfig(level=logging.INFO)
