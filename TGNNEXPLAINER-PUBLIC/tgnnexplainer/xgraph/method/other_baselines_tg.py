@@ -49,7 +49,7 @@ def _create_explainer_input(model: Union[TGAN, TGN], model_name, all_events, can
 
 
 class PGExplainerExt(BaseExplainerTG):
-    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, 
+    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, seed:int,
                  all_events: DataFrame,  explanation_level: str, device, verbose: bool = True, results_dir = None, debug_mode=True,
                  # specific params for PGExplainerExt
                  train_epochs: int = 50, explainer_ckpt_dir = None, reg_coefs = None, batch_size = 64, lr=1e-4
@@ -63,7 +63,8 @@ class PGExplainerExt(BaseExplainerTG):
                                               device=device,
                                               verbose=verbose,
                                               results_dir=results_dir,
-                                              debug_mode=debug_mode
+                                              debug_mode=debug_mode,
+                                              seed=seed
                                               )
         self.train_epochs = train_epochs
         self.explainer_ckpt_dir = explainer_ckpt_dir
@@ -267,7 +268,7 @@ class PBOneExplainerTG(BaseExplainerTG):
     """
     perturb only one event to evaluate its influence, then leverage the rank info.
     """
-    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, 
+    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, seed: int,
                  all_events: DataFrame,  explanation_level: str, device, verbose: bool = True, results_dir = None, debug_mode=True,
                 ):
         super(PBOneExplainerTG, self).__init__(model=model,
@@ -280,6 +281,7 @@ class PBOneExplainerTG(BaseExplainerTG):
                                               verbose=verbose,
                                               results_dir=results_dir,
                                               debug_mode=debug_mode,
+                                              seed=seed
                                               )
         # assert model_name in ['tgat', 'tgn']
         

@@ -6,7 +6,7 @@ from tgnnexplainer.xgraph.method.base_explainer_tg import BaseExplainerTG
 
 
 class AttnExplainerTG(BaseExplainerTG):
-    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, 
+    def __init__(self, model, model_name: str, explainer_name: str, dataset_name: str, seed: int,
                  all_events: DataFrame,  explanation_level: str, device, verbose: bool = True, results_dir = None, debug_mode=True,
                 ):
         super(AttnExplainerTG, self).__init__(model=model,
@@ -19,6 +19,7 @@ class AttnExplainerTG(BaseExplainerTG):
                                               verbose=verbose,
                                               results_dir=results_dir,
                                               debug_mode=debug_mode,
+                                              seed=seed
                                               )
         # assert model_name in ['tgat', 'tgn']
         

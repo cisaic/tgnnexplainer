@@ -12,13 +12,14 @@ from tgnnexplainer.xgraph.evaluation.metrics_tg_utils import fidelity_inv_tg, sp
 
 
 class BaseEvaluator():
-    def __init__(self, model_name: str, explainer_name: str, dataset_name: str, 
+    def __init__(self, model_name: str, explainer_name: str, dataset_name: str, seed: int,
                 explainer: BaseExplainerTG = None,
                 results_dir=None
     ) -> None:
         self.model_name = model_name
         self.dataset_name = dataset_name
         self.explainer_name = explainer_name
+        self.seed = seed
 
         self.explainer = explainer
 
@@ -27,19 +28,19 @@ class BaseEvaluator():
 
 
     @staticmethod
-    def _save_path(results_dir, model_name, dataset_name, explainer_name, event_idxs, suffix=None):
+    def _save_path(results_dir, model_name, dataset_name, explainer_name, event_idxs, seed, suffix=None):
         if isinstance(event_idxs, int):
             event_idxs = [event_idxs, ]
         
         if suffix is not None:
-            filename = Path(results_dir)/f'{model_name}_{dataset_name}_{explainer_name}_{event_idxs[0]}_to_{event_idxs[-1]}_eval_{suffix}.csv'
+            filename = Path(results_dir)/f'{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idxs[0]}_to_{event_idxs[-1]}_eval_{suffix}.csv'
         else:
-            filename = Path(results_dir)/f'{model_name}_{dataset_name}_{explainer_name}_{event_idxs[0]}_to_{event_idxs[-1]}_eval.csv'
+            filename = Path(results_dir)/f'{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idxs[0]}_to_{event_idxs[-1]}_eval.csv'
         return filename
 
     def _save_value_results(self, event_idxs, value_results, suffix=None):
         """save to a csv for plotting"""
-        filename = self._save_path(self.results_dir, self.model_name, self.dataset_name, self.explainer_name, event_idxs, suffix)
+        filename = self._save_path(self.results_dir, self.model_name, self.dataset_name, self.explainer_name, event_idxs, self.seed, suffix)
         
         df = DataFrame(value_results)
         df.to_csv(filename, index=False)
@@ -83,15 +84,16 @@ class BaseEvaluator():
 
 
 class EvaluatorAttenTG(BaseEvaluator):
-    def __init__(self, model_name: str, explainer_name: str, dataset_name: str,
+    def __init__(self, model_name: str, explainer_name: str, dataset_name: str, seed: int,
                 explainer: AttnExplainerTG,
-                results_dir=None,
+                results_dir=None
         ) -> None:
         super(EvaluatorAttenTG, self).__init__(model_name=model_name,
                                               explainer_name=explainer_name,
                                               dataset_name=dataset_name,
                                               results_dir=results_dir,
-                                              explainer = explainer
+                                              explainer = explainer,
+                                                seed=seed
                                               )
         # self.explainer = explainer
 
@@ -148,7 +150,7 @@ def array_best(values):
 
 class EvaluatorMCTSTG(BaseEvaluator):
     def __init__(self, 
-        model_name: str, explainer_name: str, dataset_name: str, 
+        model_name: str, explainer_name: str, dataset_name: str, seed:int,
         explainer: SubgraphXTG,
         results_dir = None
         ) -> None:
@@ -156,6 +158,7 @@ class EvaluatorMCTSTG(BaseEvaluator):
                                               explainer_name=explainer_name,
                                               dataset_name=dataset_name,
                                               results_dir=results_dir,
+                                              seed=seed,
                                             #   explainer=explainer
                                               )
         self.explainer = explainer

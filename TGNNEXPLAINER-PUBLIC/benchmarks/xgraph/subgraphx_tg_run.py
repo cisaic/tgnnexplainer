@@ -156,6 +156,7 @@ def pipeline(config: DictConfig):
                                 config.models.model_name, 
                                 config.explainers.explainer_name,
                                 config.datasets.dataset_name,
+                                config.seed,
                                 events,
                                 config.explainers.param.explanation_level, 
                                 device=device,
@@ -179,6 +180,7 @@ def pipeline(config: DictConfig):
                                 config.models.model_name,
                                 config.explainers.explainer_name,
                                 config.datasets.dataset_name,
+                                config.seed,
                                 events,
                                 config.explainers.param.explanation_level, 
                                 device=device,
@@ -192,6 +194,7 @@ def pipeline(config: DictConfig):
                                 config.models.model_name,
                                 config.explainers.explainer_name,
                                 config.datasets.dataset_name,
+                                config.seed,
                                 events,
                                 config.explainers.param.explanation_level, 
                                 device=device,
@@ -205,6 +208,7 @@ def pipeline(config: DictConfig):
                                 config.models.model_name,
                                 config.explainers.explainer_name,
                                 config.datasets.dataset_name,
+                                config.seed,
                                 events,
                                 config.explainers.param.explanation_level, 
                                 device=device,
@@ -239,7 +243,8 @@ def pipeline(config: DictConfig):
                                     explainer_name=config.explainers.explainer_name,
                                     dataset_name=config.datasets.dataset_name,
                                     explainer=explainer[0] if isinstance(explainer, list) else explainer,
-                                    results_dir=config.explainers.results_dir
+                                    results_dir=config.explainers.results_dir,
+                                    seed=config.seed
                                     ) 
     elif config.explainers.explainer_name in ['attn_explainer_tg', 'pbone_explainer_tg', 'pg_explainer_tg']:
         from tgnnexplainer.xgraph.evaluation.metrics_tg import EvaluatorAttenTG
@@ -247,7 +252,8 @@ def pipeline(config: DictConfig):
                                     explainer_name=config.explainers.explainer_name,
                                     dataset_name=config.datasets.dataset_name,
                                     explainer=explainer,
-                                    results_dir=config.explainers.results_dir
+                                    results_dir=config.explainers.results_dir,
+                                    seed = config.seed
                                     ) # DONE: updated
     else:
         raise NotImplementedError

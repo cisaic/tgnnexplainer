@@ -10,7 +10,7 @@ from tgnnexplainer.xgraph.method.tg_score import TGNNRewardWraper
 from tgnnexplainer.xgraph.dataset.utils_dataset import k_hop_temporal_subgraph
 
 class BaseExplainerTG(object):
-    def __init__(self, model: Union[TGAN, None], model_name: str, explainer_name: str, dataset_name: str, all_events: str, explanation_level: str, device, 
+    def __init__(self, model: Union[TGAN, None], model_name: str, explainer_name: str, dataset_name: str, seed:int, all_events: str, explanation_level: str, device, 
                 verbose: bool = True, results_dir: Optional[str] = None, debug_mode: bool=True) -> None:
         """
         results_dir: dir for saving value results, e.g., fidelity_sparsity. Not mcts_node_list
@@ -19,6 +19,7 @@ class BaseExplainerTG(object):
         self.model_name = model_name
         self.explainer_name = explainer_name # self's name
         self.dataset_name = dataset_name
+        self.seed = seed
         self.all_events = all_events
         self.num_users = all_events.iloc[:, 0].max() + 1
         self.explanation_level = explanation_level
@@ -145,11 +146,11 @@ class BaseExplainerTG(object):
         
 
     @staticmethod
-    def _score_path(results_dir, model_name, dataset_name, explainer_name, event_idx,):
+    def _score_path(results_dir, model_name, dataset_name, explainer_name, event_idx, seed):
         """
         only for baseline explainer, save their computed candidate scores.
         """
-        score_filename = results_dir/f'{model_name}_{dataset_name}_{explainer_name}_{event_idx}_candidate_scores.csv'
+        score_filename = results_dir/f'{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idx}_candidate_scores.csv'
         return score_filename
 
     def _save_candidate_scores(self, candidate_weights, event_idx):
@@ -157,7 +158,7 @@ class BaseExplainerTG(object):
         only for baseline explainer, save their computed candidate scores.
         """
         assert isinstance(candidate_weights, dict)
-        filename = self._score_path(self.results_dir, self.model_name, self.dataset_name, self.explainer_name, event_idx)
+        filename = self._score_path(self.results_dir, self.model_name, self.dataset_name, self.explainer_name, event_idx, self.seed)
         data_dict = {
             'candidates': [],
             'scores': []
