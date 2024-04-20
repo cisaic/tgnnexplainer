@@ -190,6 +190,7 @@ def pipeline(config: DictConfig):
             dataset_name=config.datasets.dataset_name,
             ckpt_dir=config.explainers.explainer_ckpt_dir,
             device=device,
+            seed=config.seed,
         )
         print("used pg_explainer_tg ckpt:", explainer_ckpt_path)
 

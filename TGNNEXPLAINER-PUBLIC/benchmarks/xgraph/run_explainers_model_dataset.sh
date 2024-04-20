@@ -3,6 +3,7 @@
 
 # call this script with `bash run_explainers_model_dataset.sh 0 tgat wikipedia 2020` to on the first GPU with dataset wikipedia with seed 2020
 
+# bash run_explainers_model_dataset.sh 1 tgat wikipedia 1  2>&1 | tee logs/tgat-wikipedia-gpu1-seed1.log # to write to a log file
 
 # run all explainers
 # model = tgn, tgat
@@ -19,6 +20,8 @@ seed=$4
 echo "=== STARTING pg_explainer explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
 python subgraphx_tg_run.py datasets=${dataset} device_id=${gpu} explainers=pg_explainer_tg models=${model} seed=${seed}
 echo "=== STARTING pg_explainer explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
+
+curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from 'fgolemo@gmail.com' --mail-rcpt 'fgolemo@gmail.com' --mail-rcpt 'c.isaicu@gmail.com' --user 'fgolemo@gmail.com:cbpd uyvw pzqg fppq' -T <(echo -e "From: fgolemo@gmail.com\nTo: fgolemo@gmail.com,c.isaicu@gmail.com\nSubject: Training Done\n\nFinished PG model training of ${model} explanation of ==${dataset}== with seed ==${seed}== on on GPU ==${gpu}==")
 
 # ours
 echo "=== STARTING subgraphx explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="

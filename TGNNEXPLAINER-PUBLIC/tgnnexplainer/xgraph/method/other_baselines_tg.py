@@ -155,16 +155,16 @@ class PGExplainerExt(BaseExplainerTG):
         return explainer_model
 
     @staticmethod
-    def _ckpt_path(ckpt_dir, model_name, dataset_name, explainer_name, epoch=None):
+    def _ckpt_path(ckpt_dir, model_name, dataset_name, explainer_name, seed, epoch=None):
         if epoch is None:
             return (
                 Path(ckpt_dir)
-                / f"{model_name}_{dataset_name}_{explainer_name}_expl_ckpt.pt"
+                / f"{model_name}_{dataset_name}_{explainer_name}_{seed}_expl_ckpt.pt"
             )
         else:
             return (
                 Path(ckpt_dir)
-                / f"{model_name}_{dataset_name}_{explainer_name}_expl_ckpt_ep{epoch}.pt"
+                / f"{model_name}_{dataset_name}_{explainer_name}_{seed}_expl_ckpt_ep{epoch}.pt"
             )
 
     def _init_explainer(self):
@@ -180,6 +180,7 @@ class PGExplainerExt(BaseExplainerTG):
             self.model_name,
             self.dataset_name,
             self.explainer_name,
+            self.seed
         )
         self.explain_event_idxs = event_idxs
 
@@ -344,6 +345,7 @@ class PGExplainerExt(BaseExplainerTG):
                 self.model_name,
                 self.dataset_name,
                 self.explainer_name,
+                self.seed,
                 epoch=e,
             )
             torch.save(state_dict, ckpt_save_path)
@@ -382,11 +384,11 @@ class PGExplainerExt(BaseExplainerTG):
 
     @staticmethod
     def expose_explainer_model(
-        model, model_name, explainer_name, dataset_name, ckpt_dir, device
+        model, model_name, explainer_name, dataset_name, ckpt_dir, device, seed
     ):
         explainer_model = PGExplainerExt._create_explainer(model, model_name, device)
         explainer_ckpt_path = PGExplainerExt._ckpt_path(
-            ckpt_dir, model_name, dataset_name, explainer_name
+            ckpt_dir, model_name, dataset_name, explainer_name, seed
         )
 
         state_dict = torch.load(explainer_ckpt_path)
