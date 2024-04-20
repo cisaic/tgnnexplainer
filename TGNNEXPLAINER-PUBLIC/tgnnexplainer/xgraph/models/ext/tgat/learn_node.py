@@ -188,7 +188,7 @@ idx_list = np.arange(num_instance)
 np.random.shuffle(idx_list) 
 
 logger.info('loading saved TGAN model')
-model_path = f'./saved_models/{args.prefix}-{args.agg_method}-{args.attn_mode}-{DATA}.pth'
+model_path = f'./saved_models/{args.prefix}-{args.agg_method}-{args.attn_mode}-{DATA}.pth' # TODO SEED
 tgan.load_state_dict(torch.load(model_path))
 tgan.eval()
 logger.info('TGAN models loaded')
