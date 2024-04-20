@@ -9,7 +9,7 @@ read ans
 for seed in 1 2 2020
 do
     echo "=== STARTING TGN model training of simulate_v1 on seed ${seed} on GPU ${gpu} ==="
-    python train_simulate.py -d simulate_v1 --prefix tgn-attn --n_runs 1 --n_epoch 100 --n_layer 2 --node_dim 4 --time_dim 4 --memory_dim 4 --message_dim 4 --n_degree 10 --use_memory --memory_update_at_end --gpu ${gpu} --prefix ${ds} --seed ${seed}
+    python train_simulate.py -d simulate_v1 --prefix tgn-attn --n_runs 1 --n_epoch 100 --n_layer 2 --node_dim 4 --time_dim 4 --memory_dim 4 --message_dim 4 --n_degree 10 --use_memory --memory_update_at_end --gpu ${gpu} --seed ${seed}
     echo "=== DONE TGN model training of simulate_v1 on seed ${seed} on GPU ${gpu} ==="
 
     echo "=== STARTING TGN model training of simulate_v2 on seed ${seed} on GPU ${gpu} ==="

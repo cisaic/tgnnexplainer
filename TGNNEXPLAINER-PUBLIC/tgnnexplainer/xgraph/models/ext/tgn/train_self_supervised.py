@@ -4,6 +4,7 @@ import time
 import sys
 import argparse
 import torch
+import random
 print(torch.__version__)
 import numpy as np
 import pickle
