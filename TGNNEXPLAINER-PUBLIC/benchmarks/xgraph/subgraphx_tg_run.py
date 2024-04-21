@@ -305,6 +305,7 @@ def pipeline(config: DictConfig):
             explainer=explainer[0] if isinstance(explainer, list) else explainer,
             results_dir=config.explainers.results_dir,
             seed=config.seed,
+            suffix=f"cpuct_{config.explainers.param.c_puct}"
         )
     elif config.explainers.explainer_name in [
         "attn_explainer_tg",

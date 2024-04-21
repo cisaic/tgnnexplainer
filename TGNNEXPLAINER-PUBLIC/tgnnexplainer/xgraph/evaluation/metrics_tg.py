@@ -198,6 +198,7 @@ class EvaluatorMCTSTG(BaseEvaluator):
         seed: int,
         explainer: SubgraphXTG,
         results_dir=None,
+        suffix=None,
     ) -> None:
         super(EvaluatorMCTSTG, self).__init__(
             model_name=model_name,
@@ -205,6 +206,7 @@ class EvaluatorMCTSTG(BaseEvaluator):
             dataset_name=dataset_name,
             results_dir=results_dir,
             seed=seed,
+            suffix=suffix,
             #   explainer=explainer
         )
         self.explainer = explainer
