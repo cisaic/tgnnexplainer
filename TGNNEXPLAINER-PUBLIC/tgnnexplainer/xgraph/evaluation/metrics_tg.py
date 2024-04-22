@@ -23,6 +23,7 @@ class BaseEvaluator:
         seed: int,
         explainer: BaseExplainerTG = None,
         results_dir=None,
+        cpuct=None
     ) -> None:
         self.model_name = model_name
         self.dataset_name = dataset_name
@@ -32,7 +33,8 @@ class BaseEvaluator:
         self.explainer = explainer
 
         self.results_dir = results_dir
-        self.suffix = None
+        self.suffix = None # this is set by the explainer
+        self.cpuct = cpuct
 
     @staticmethod
     def _save_path(
@@ -43,23 +45,22 @@ class BaseEvaluator:
         event_idxs,
         seed,
         suffix=None,
+        cpuct=None
     ):
         if isinstance(event_idxs, int):
             event_idxs = [
                 event_idxs,
             ]
 
+        fname = f"{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idxs[0]}_to_{event_idxs[-1]}_eval"
+        if cpuct is not None:
+            fname = f"{fname}_cpuct_{cpuct}"
         if suffix is not None:
-            filename = (
-                Path(results_dir)
-                / f"{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idxs[0]}_to_{event_idxs[-1]}_eval_{suffix}.csv"
-            )
-        else:
-            filename = (
-                Path(results_dir)
-                / f"{model_name}_{dataset_name}_{explainer_name}_{seed}_{event_idxs[0]}_to_{event_idxs[-1]}_eval.csv"
-            )
-        return filename
+            fname = f"{fname}_{suffix}"
+
+        fpath = Path(results_dir)/f"{fname}.csv"
+
+        return fpath
 
     def _save_value_results(self, event_idxs, value_results, suffix=None):
         """save to a csv for plotting"""
@@ -71,6 +72,7 @@ class BaseEvaluator:
             event_idxs,
             self.seed,
             suffix,
+            self.cpuct
         )
 
         df = DataFrame(value_results)
@@ -198,7 +200,7 @@ class EvaluatorMCTSTG(BaseEvaluator):
         seed: int,
         explainer: SubgraphXTG,
         results_dir=None,
-        suffix=None,
+        cpuct=None,
     ) -> None:
         super(EvaluatorMCTSTG, self).__init__(
             model_name=model_name,
@@ -206,7 +208,7 @@ class EvaluatorMCTSTG(BaseEvaluator):
             dataset_name=dataset_name,
             results_dir=results_dir,
             seed=seed,
-            suffix=suffix,
+            cpuct=cpuct,
             #   explainer=explainer
         )
         self.explainer = explainer
