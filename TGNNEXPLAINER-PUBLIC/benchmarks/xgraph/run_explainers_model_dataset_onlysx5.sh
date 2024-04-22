@@ -9,19 +9,18 @@
 # model = tgn, tgat
 # dataset = wikipedia # wikipedia, reddit, simulate_v1, simulate_v2, mooc
 
+# bash run_explainers_model_dataset_onlysx5.sh 0 tgn wikipedia 2020 2>&1 | tee logs/tgn-wikipedia-gpu0-seed2020-sx5.log
+# bash run_explainers_model_dataset_onlysx5.sh 1 tgn wikipedia 2 2>&1 | tee logs/tgn-wikipedia-gpu1-seed2-sx5.log
+# bash run_explainers_model_dataset_onlysx5.sh 0 tgn reddit 2 2>&1 | tee logs/tgn-reddit-gpu1-seed2-sx5.log
+
 gpu=$1
 model=$2
 dataset=$3
 seed=$4
 
-# bash run_explainers_model_dataset.sh 1 tgn mooc 2  2>&1 | tee logs/tgn-mooc-gpu1-seed2.log
-
 echo "run on GPU ${gpu} on dataset ${ds} model ${model} with seed ${seed}"
-ecoh "=== all explainers ==="
-if [ $seed -eq 1 ]
-then
-    echo "=== RUNNING c_puct 1,10,100 because seed is 1 ==="
-fi
+ecoh "=== ONLY LAMBDA/C_PUCT 5 ==="
+ecoh "=== ONLY PG_EXPLAINER_TG AND SUBGRAPH_TG ==="
 
 printf "%s " "Press enter to continue"
 read ans
@@ -37,25 +36,6 @@ curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from 'fgolemo@gmail.co
 echo "=== STARTING subgraphx explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
 # we always run c_puct 5
 python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=5
-
-# we run c_puct 1, 10, 100 if seed is 1
-if [ $seed -eq 1 ]
-then
-    echo "=== RUNNING c_puct 1,10,100 because seed is 1 ==="
-    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=1
-    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=10
-    python subgraphx_tg_run.py  datasets=${dataset} device_id=${gpu} explainers=subgraphx_tg models=${model} seed=${seed} explainers.param.${dataset}.c_puct=100
-fi
-echo "=== ENDING subgraphx_tg explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-
-# baselines
-echo "=== STARTING attn explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-python subgraphx_tg_run.py datasets=${dataset} device_id=${gpu} explainers=attn_explainer_tg models=${model} seed=${seed}
-echo "=== ENDING attn_explainer_tg explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-
-echo "=== STARTING pbone explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed}==="
-python subgraphx_tg_run.py datasets=${dataset} device_id=${gpu} explainers=pbone_explainer_tg models=${model} seed=${seed}
-echo "=== ENDING pbone explaining on ${model} trained on ${dataset} on GPU ${gpu} with seed ${seed} ==="
 
 echo "good job :)"
 
