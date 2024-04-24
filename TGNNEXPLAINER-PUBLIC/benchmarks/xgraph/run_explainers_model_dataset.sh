@@ -16,8 +16,8 @@ seed=$4
 
 # bash run_explainers_model_dataset.sh 1 tgn mooc 2  2>&1 | tee logs/tgn-mooc-gpu1-seed2.log
 
-echo "run on GPU ${gpu} on dataset ${ds} model ${model} with seed ${seed}"
-ecoh "=== all explainers ==="
+echo "run on GPU ${gpu} on dataset ${dataset} model ${model} with seed ${seed}"
+echo "=== all explainers ==="
 if [ $seed -eq 1 ]
 then
     echo "=== RUNNING c_puct 1,10,100 because seed is 1 ==="

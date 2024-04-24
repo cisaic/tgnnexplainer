@@ -77,6 +77,7 @@ class MCTSNode(object):
 
     def U(self, n):
         # return self.c_puct * self.P * math.sqrt(n) / (1 + self.N)
+        # print (f"doing some explaining with CPUCT {self.c_puct}")
         return self.c_puct * math.sqrt(n) / (1 + self.N)
 
     @property
