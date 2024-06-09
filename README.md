@@ -1,9 +1,9 @@
+This repo is cloned from the repo [chaosido/FACT-course](https://github.com/chaosido/FACT-course/tree/dev). To see the changelog used for this project, see the original repo.
+
 # :sparkles: TGNExplainer reproduction :sparkles:
 
 This repo is ment to ease the reproduction of results of [TGNNExplainer](https://openreview.net/forum?id=BR_ZhvcYbGJ). 
 In addition this repository adds two more open-source datasets for training on the proposed methodology.
-
-code_hilr and code_lolr are directories for learning rate exprimentation. For now
 
 # Download wikipedia and reddit datasets
 Download from http://snap.stanford.edu/jodie/wikipedia.csv and http://snap.stanford.edu/jodie/reddit.csv and http://snap.stanford.edu/jodie/mooc.csv
@@ -65,11 +65,10 @@ model is findable during the explainer training. make sure cpckpt.sh is ran for 
 
 # Run our explainer and other  baselines
 ```
-cd  ~/workspace/TGNNEXPLAINER-PUBLIC/benchmarks
-./run.sh
+cd  ~/workspace/TGNNEXPLAINER-PUBLIC/benchmarks/xgraph
+./run_explainers_model_dataset.sh
 ``` 
 In the benchmars directory a shell script exists for training all 4 explainers on a (dataset,model) combination. 
-
 
 
 dataset= reddit, Wikipedia, simulate_v1, simulate_v2, mooc, reddit_hyperlinks.
